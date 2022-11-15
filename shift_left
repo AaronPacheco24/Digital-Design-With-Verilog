@@ -1,0 +1,117 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 11/14/2022 11:07:06 AM
+// Design Name: 
+// Module Name: shiftleft
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module shiftleft(clock, reset, command, dataA, leds, done,commandled,resetled,inpleds);
+localparam n=4;
+input clock, reset, command;
+input [3:0] dataA;  //Data A is the 4 bit input to be shifted..
+output reg [3:0] leds;
+output reg done,resetled,commandled;
+output reg [3:0] inpleds;
+reg [1:0] state_reg;
+localparam [1:0] s1=2'b01, s2=2'b10, s3=2'b11;
+reg [1:0] state_next;
+reg [2*n-1:0] registerA, registerA_next;
+reg [2*n-1:0] led_next;
+reg done_next;
+reg two_sec;
+reg [26:0]cntr;
+ 
+always @ (posedge clock)
+begin
+cntr=cntr+1;
+    if (cntr == 100_000_000)
+    begin
+        two_sec =~two_sec;
+        cntr = 0;
+    end
+end
+
+always @(posedge two_sec)
+if (reset)
+    begin
+        state_reg <= s1;
+        leds<=0;
+        registerA<=0;
+        done=0;
+    end
+else
+    begin
+        state_reg <= state_next;
+        leds<=led_next;
+        registerA<=registerA_next;
+
+        done<= done_next;
+    end
+
+always @*
+begin
+    commandled=command;
+    resetled=reset;
+    inpleds = dataA;
+    state_next = state_reg; 
+    led_next=leds;
+    registerA_next=registerA;
+    done_next=done;
+    case (state_reg)
+    s1:
+    begin
+       if (command==1)
+         begin
+           state_next=s2;
+           done_next=0;
+         end
+       else
+         begin
+           registerA_next ={4'b0, dataA};
+         end
+    end
+    s2:
+    begin
+       if (registerA==0)
+         begin
+           state_next=s3;
+         end
+       else
+        begin
+         if (registerA_next[3]==1'b1)
+          begin
+            led_next<= leds + 1;
+          end
+        end
+        registerA_next=registerA<<1;
+    end
+    s3:
+    begin
+      done_next=1;
+      if (command==0)
+         state_next=s1;
+    end
+    
+    default:
+    begin
+        state_next = s1; 
+        done_next=0;
+    end
+    endcase
+end
+endmodule
