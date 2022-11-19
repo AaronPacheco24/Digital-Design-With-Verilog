@@ -353,5 +353,5 @@ end
   end
          
   always @(duration) noteTime = (duration * clockFrequency/8); 
-       //number of   FPGA clock periods in one note.
+       //number of   FPGA clock periods in one note. 
 endmodule 
