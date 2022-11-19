@@ -1,5 +1,3 @@
-# ECE3300-L
-ECE 3300&amp;L - Digital Circuit Design Verilog
-Programs for ECE 3300 & 3300L in Fall 2022. 
-Code in .v for vivado 2019.1
-Simulation vs Module files will be indicated. 
+Code is done in Verilog. With Vivado 2019.1
+All projects are designed with the intent of being programmed on a Digilent Nexys A7-50t FPGA
+If there is no .xdc file, then the project is meant to be tested via simulation.
