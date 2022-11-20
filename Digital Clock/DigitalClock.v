@@ -32,7 +32,7 @@ if (counter == 125_000)
     end
 end
 endmodule
-
+ 
 module onehzgen(clck, signal);
 input clck;
 output reg signal;
