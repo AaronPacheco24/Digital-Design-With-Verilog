@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-
+ 
 module Lab8(input clock, output [7:0]AN, output [6:0]C);
 wire outsig400hz;
 wire outsig1hz;
