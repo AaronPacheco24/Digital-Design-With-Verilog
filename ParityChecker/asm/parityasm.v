@@ -1,5 +1,4 @@
-
-
+`timescale 1ns / 1ps
 module parityasm(input clock, input load, input [7:0]dataA,output reg serialout, output reg parity,output reg [7:0]registerA);
 localparam n=4;
 reg [1:0] state_reg;
